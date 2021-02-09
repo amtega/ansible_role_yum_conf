@@ -1,7 +1,6 @@
 ---
 # Role tasks
-# - set_fact:
-#     yum_conf_file: "{{ (ansible_distribution == 'Fedora') | ternary(yum_conf_file_fedora,yum_conf_file_centos) }}"
+
 - name: Set configuration options
   block:
     - debug:
@@ -13,9 +12,6 @@
         state: present
         backup: yes
       loop: "{{ yum_conf_items_options}}"
-          # {{ yum_conf_options
-          # | selectattr("state", "equalto", "present")
-          # | list }}
       loop_control:
         loop_var: yum_conf_items
         label: "{{ yum_conf_items.option }}"
@@ -25,7 +21,6 @@
        {{ yum_conf_options
        | selectattr("state", "equalto", "present")
        | list }}
-
 
 - name: Remove configuration options
   lineinfile:

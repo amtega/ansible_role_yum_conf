@@ -1,2 +1,5 @@
 ---
 # Role variables
+
+yum_conf_file_centos: /etc/yum.conf
+yum_conf_file_fedora: /etc/dnf/dnf.conf

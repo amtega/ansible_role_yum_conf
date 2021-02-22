@@ -4,15 +4,4 @@
   hosts: molecule_hosts
   gather_facts: yes
   roles:
-    - role: amtega.yum_conf
-      vars:
-        yum_conf_options:
-          - option: logfile
-            value: /var/log/yum.log
-            state: present
-          - option: gpgcheck
-            value: 0
-            state: present
-          - option: cachedir
-            value: /var/cache/yum/$basearch/$releasever
-            state: absent
+    - amtega.yum_conf

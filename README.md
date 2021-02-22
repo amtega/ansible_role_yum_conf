@@ -2,28 +2,18 @@
 
 This is an [Ansible](http://www.ansible.com) role configure yum.conf and dnf.conf options
 
-## Requirements
-
-[Ansible 2.7+](http://docs.ansible.com/ansible/latest/intro_installation.html)
-
 ## Role Variables
 
 A list of all the default variables for this role is available in `defaults/main.yml`.
 
-## Tests
-
-
-## Dependencies
-
-
-## Usage
+## Example Playbook
 
 This is an example playbook:
 
 ```yaml
 ---
+
 - hosts: all
-  gather_facts: yes
   roles:
     - role: amtega.yum_conf
       vars:
@@ -36,8 +26,7 @@ This is an example playbook:
             state: present
           - option: cachedir
             value: /var/cache/yum/$basearch/$releasever
-            state: absent
-
+            state: absent        
 ```
 
 ## Testing
@@ -47,11 +36,12 @@ Tests are based on [molecule with docker containers](https://molecule.readthedoc
 ```shell
 cd amtega.yum_conf
 
-molecule test
+molecule test --all
 ```
+
 ## License
 
-Copyright (C) <!-- YEAR --> AMTEGA - Xunta de Galicia
+Copyright (C) 2021 AMTEGA - Xunta de Galicia
 
 This role is free software: you can redistribute it and/or modify it under the terms of:
 
@@ -62,3 +52,4 @@ This role is distributed in the hope that it will be useful, but WITHOUT ANY WAR
 ## Author Information
 
 - Carlos Chedas Fernandez.
+- Juan Antonio Valiño García.

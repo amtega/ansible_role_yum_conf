@@ -4,22 +4,17 @@
   hosts: molecule_hosts
   gather_facts: yes
   tasks:
-    - name: yum.conf content
-      block:
-        - command: cat /etc/yum.conf
-          register: cat_output
+    - name: Gather config file content
+      command: >-
+        cat
+        {{ (ansible_facts.distribution | lower == "fedora")
+           | ternary("/etc/dnf/dnf.conf", "/etc/yum.conf") }}
+      changed_when: no
+      register: config_file_result
 
-        - debug:
-            msg: "{{ cat_output.stdout_lines }}"
-
-      when: ansible_distribution == "CentOS"
-
-    - name: dnf.conf content
-      block:
-        - command: cat /etc/dnf/dnf.conf
-          register: cat_output
-
-        - debug:
-            msg: "{{ cat_output.stdout_lines }}"
-
-      when: ansible_distribution == "Fedora"
+    - name: Assert config options are valid
+      assert:
+        that:
+          - config_file_result.stdout is search("logfile=/var/log/yum.log")
+          - config_file_result.stdout is search("gpgcheck=0")
+          - config_file_result.stdout is not search("cachedir")

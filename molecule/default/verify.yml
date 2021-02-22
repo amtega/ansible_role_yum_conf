@@ -2,6 +2,24 @@
 
 - name: Verify
   hosts: molecule_hosts
-  gather_facts: no
+  gather_facts: yes
   tasks:
-    - debug: msg="Verify to be done"
+    - name: yum.conf content
+      block:
+        - command: cat /etc/yum.conf
+          register: cat_output
+
+        - debug:
+            msg: "{{ cat_output.stdout_lines }}"
+
+      when: ansible_distribution == "CentOS"
+
+    - name: dnf.conf content
+      block:
+        - command: cat /etc/dnf/dnf.conf
+          register: cat_output
+
+        - debug:
+            msg: "{{ cat_output.stdout_lines }}"
+
+      when: ansible_distribution == "Fedora"

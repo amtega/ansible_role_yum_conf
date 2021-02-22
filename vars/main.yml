@@ -3,3 +3,6 @@
 
 yum_conf_file_centos: /etc/yum.conf
 yum_conf_file_fedora: /etc/dnf/dnf.conf
+yum_conf_file: >-
+  {{ (ansible_facts.distribution | lower == "fedora")
+     | ternary(yum_conf_file_fedora, yum_conf_file_centos) }}

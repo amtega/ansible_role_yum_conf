@@ -6,12 +6,6 @@ driver:
   name: docker
 lint: "${MOLECULE_SCENARIO_DIRECTORY}/linters.sh"
 platforms:
-  - name: "centos6-${INSTANCE_UUID:-1}"
-    image: centos:6
-    groups:
-      - molecule_hosts
-      - molecule_hosts_centos
-      - molecule_hosts_centos_6
   - name: "centos7-${INSTANCE_UUID:-1}"
     image: centos:7
     groups:
@@ -24,18 +18,18 @@ platforms:
       - molecule_hosts
       - molecule_hosts_centos
       - molecule_hosts_centos_8
-  - name: "fedora29-${INSTANCE_UUID:-1}"
-    image: fedora:29
+  - name: "fedora32-${INSTANCE_UUID:-1}"
+    image: fedora:32
     groups:
       - molecule_hosts
       - molecule_hosts_fedora
-      - molecule_hosts_fedora_29
-  - name: "fedora30-${INSTANCE_UUID:-1}"
-    image: fedora:30
+      - molecule_hosts_fedora_32
+  - name: "fedora33-${INSTANCE_UUID:-1}"
+    image: fedora:33
     groups:
       - molecule_hosts
       - molecule_hosts_fedora
-      - molecule_hosts_fedora_30
+      - molecule_hosts_fedora_33
 provisioner:
   name: ansible
   config_options:
@@ -46,6 +40,16 @@ provisioner:
     hosts:
       molecule_hosts:
         vars:
+          yum_conf_options:
+            - option: logfile
+              value: /var/log/yum.log
+              state: present
+            - option: gpgcheck
+              value: 0
+              state: present
+            - option: cachedir
+              value: /var/cache/yum/$basearch/$releasever
+              state: absent
       molecule_hosts_fedora:
         vars:
           ansible_python_interpreter: /usr/bin/python3

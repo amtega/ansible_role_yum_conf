@@ -1,2 +1,12 @@
 ---
 # Role default lower priority variables
+
+yum_conf_options: []
+
+# list of dicts with the following options:
+#   yum_conf_options:
+#     - option: logfile
+#       value: /var/log/yum.log
+#       state: present
+#     - option: gpgcheck
+#       value: 0

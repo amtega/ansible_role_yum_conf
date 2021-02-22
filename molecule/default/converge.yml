@@ -2,6 +2,17 @@
 
 - name: Converge
   hosts: molecule_hosts
-  gather_facts: no
+  gather_facts: yes
   roles:
-    - amtega.template
+    - role: amtega.yum_conf
+      vars:
+        yum_conf_options:
+          - option: logfile
+            value: /var/log/yum.log
+            state: present
+          - option: gpgcheck
+            value: 0
+            state: present
+          - option: cachedir
+            value: /var/cache/yum/$basearch/$releasever
+            state: absent

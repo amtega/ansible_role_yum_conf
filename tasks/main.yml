@@ -1,2 +1,39 @@
 ---
 # Role tasks
+
+- name: Set configuration options
+  block:
+    - debug:
+        msg: "{{ yum_conf_items_options}}"
+    - lineinfile:
+        path: "{{ yum_conf_file }}"
+        regexp: '^{{yum_conf_items.option}}='
+        line: "{{ yum_conf_items.option }}={{ yum_conf_items.value }}"
+        state: present
+        backup: yes
+      loop: "{{ yum_conf_items_options}}"
+      loop_control:
+        loop_var: yum_conf_items
+        label: "{{ yum_conf_items.option }}"
+  vars:
+    yum_conf_file: "{{ (ansible_distribution == 'Fedora') | ternary(yum_conf_file_fedora,yum_conf_file_centos) }}"
+    yum_conf_items_options: >-
+       {{ yum_conf_options
+       | selectattr("state", "equalto", "present")
+       | list }}
+
+- name: Remove configuration options
+  lineinfile:
+    path: "{{ yum_conf_file }}"
+    regexp: "^{{ yum_conf_items.option }}="
+    line: "{{ yum_conf_items.option }}={{ yum_conf_items.value }}"
+    state: absent
+  loop: >-
+    {{ yum_conf_options
+      | selectattr("state", "equalto", "absent")
+      | list }}
+  loop_control:
+    loop_var: yum_conf_items
+    label: "{{ yum_conf_items.option }}"
+  vars:
+    yum_conf_file: "{{ (ansible_distribution == 'Fedora') | ternary(yum_conf_file_fedora,yum_conf_file_centos) }}"

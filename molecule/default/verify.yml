@@ -7,7 +7,7 @@
     - name: Gather config file content
       command: >-
         cat
-        {{ (ansible_facts.distribution | lower == "fedora")
+        {{ (ansible_facts.distribution_major_version is version("7", ">"))
            | ternary("/etc/dnf/dnf.conf", "/etc/yum.conf") }}
       changed_when: no
       register: config_file_result

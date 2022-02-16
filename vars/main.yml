@@ -1,8 +1,9 @@
 ---
 # Role variables
 
-yum_conf_file_centos: /etc/yum.conf
-yum_conf_file_fedora: /etc/dnf/dnf.conf
+yum_conf_file_path: /etc/yum.conf
+yum_dnf_conf_file_path: /etc/dnf/dnf.conf
+
 yum_conf_file: >-
-  {{ (ansible_facts.distribution | lower == "fedora")
-     | ternary(yum_conf_file_fedora, yum_conf_file_centos) }}
+  {{ (ansible_facts.distribution_major_version is version("7", ">"))
+     | ternary(yum_dnf_conf_file_path, yum_conf_file_path) }}
